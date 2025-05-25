@@ -5,11 +5,14 @@
     "description": "Simulate sending multiple connection requests.",
     "permissions": ["scripting", "activeTab"],
     "action": {
-      "default_icon": "images/linkedin.png"
+      "default_popup": "popup/popup.html"
     },
-    "background": {
-      "service_worker": "background.js"
-    },
+    "content_scripts": [
+        {
+          "matches": ["*://www.linkedin.com/*"],
+          "js": ["content.js"]
+        }
+      ],
     "host_permissions": ["https://www.linkedin.com/*"]
   }
   
