@@ -1,0 +1,15 @@
+{
+    "manifest_version": 3,
+    "name": "Auto Connect (Educational)",
+    "version": "1.0",
+    "description": "Simulate sending multiple connection requests.",
+    "permissions": ["scripting", "activeTab"],
+    "action": {
+      "default_icon": "images/linkedin.png"
+    },
+    "background": {
+      "service_worker": "background.js"
+    },
+    "host_permissions": ["https://www.linkedin.com/*"]
+  }
+  
