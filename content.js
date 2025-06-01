@@ -1,4 +1,4 @@
-async function goToCompanyPeopleSection(companyName = "Apple",numberOfConnections = 5) {
+async function goToCompanyPeopleSection(companyName = "Apple") {
     const searchInput = document.querySelector('input[placeholder="Search"]');
     if (!searchInput) return console.log("Search input not found!");
   
@@ -34,11 +34,28 @@ async function goToCompanyPeopleSection(companyName = "Apple",numberOfConnection
     }
   }
   
-  async function sendConnectionRequests() {
+  async function sendConnectionRequests(numberOfConnections = 5) {
+    while(true){
     const connectButtons = [...document.querySelectorAll("button")].filter(btn =>
       btn.innerText.includes("Connect")
     );
-  
+    if(connectButtons.length>=numberOfConnections)break;
+    const showMoreBtn = [...document.querySelectorAll('button')]
+    .find(btn => btn.innerText.trim().toLowerCase() === "show more results");
+
+    if (showMoreBtn) {
+      showMoreBtn.click();
+      
+      // console.log("Clicked 'Show more' button.");
+    } else {
+      break;
+      // console.log("'Show more' button not found.");
+    }
+  }
+    const connectButtons = [...document.querySelectorAll("button")].filter(btn =>
+      btn.innerText.includes("Connect")
+    );   
+
     let maxLen = Math.min(connectButtons.length, numberOfConnections);
     // let maxLen = 2;
     for (let i = 0; i < maxLen; i++) {
@@ -65,9 +82,9 @@ async function goToCompanyPeopleSection(companyName = "Apple",numberOfConnection
   }
   
   async function runTheScript(companyName,numberOfConnections) {
-    await goToCompanyPeopleSection(companyName,numberOfConnections);
+    await goToCompanyPeopleSection(companyName);
     await new Promise(r => setTimeout(r, 3000));
-    await sendConnectionRequests();
+    await sendConnectionRequests(numberOfConnections);
   }
   
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
