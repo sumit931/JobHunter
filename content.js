@@ -1,4 +1,4 @@
-async function goToCompanyPeopleSection(companyName = "Apple") {
+async function goToCompanyPeopleSection(companyName = "Apple",numberOfConnections = 5) {
     const searchInput = document.querySelector('input[placeholder="Search"]');
     if (!searchInput) return console.log("Search input not found!");
   
@@ -39,7 +39,8 @@ async function goToCompanyPeopleSection(companyName = "Apple") {
       btn.innerText.includes("Connect")
     );
   
-    let maxLen = Math.min(connectButtons.length, 20);
+    let maxLen = Math.min(connectButtons.length, numberOfConnections);
+    // let maxLen = 2;
     for (let i = 0; i < maxLen; i++) {
       console.log(`Clicking Connect button #${i + 1}`);
       connectButtons[i].click();
@@ -63,8 +64,8 @@ async function goToCompanyPeopleSection(companyName = "Apple") {
     console.log("Finished sending connection requests.");
   }
   
-  async function runTheScript(companyName) {
-    await goToCompanyPeopleSection(companyName);
+  async function runTheScript(companyName,numberOfConnections) {
+    await goToCompanyPeopleSection(companyName,numberOfConnections);
     await new Promise(r => setTimeout(r, 3000));
     await sendConnectionRequests();
   }
@@ -72,7 +73,11 @@ async function goToCompanyPeopleSection(companyName = "Apple") {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.action === "start" && message.companyName) {
       console.log("Received company name:", message.companyName);
-      runTheScript(message.companyName);
+      runTheScript(message.companyName, message.numberOfConnections)
+        .then(() => {
+          sendResponse({ status: "success" });
+        })
+      return true; // This is important! It tells Chrome to keep the message channel open for the async response
     }
   });
   
