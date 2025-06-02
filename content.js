@@ -45,7 +45,8 @@ async function goToCompanyPeopleSection(companyName = "Apple") {
 
     if (showMoreBtn) {
       showMoreBtn.click();
-      
+      await new Promise(r=>setTimeout(r,1500));
+
       // console.log("Clicked 'Show more' button.");
     } else {
       break;
